@@ -1,0 +1,67 @@
+items = []
+while True:
+    display = input('Press enter to continue.')
+    print('1. View items\n2. Add items\n3. Edit items\n4. Exit')
+    choice = input('Enter the number of your choice : ')
+
+    if choice == '1' :
+        print('View Items')
+        print('The number of items in the inventory are : ',len(items))
+        while len(items) != 0:
+            print('Here are all the items available in the supermarket.')
+            for item in items:
+                for key, value in item.items():
+                    print(key, ':', value)
+            break
+
+    elif choice == '2' :
+        print('Add Items')
+        print('To Add an item in the Inventory')
+        item = {}
+        item['name'] = input('Item name : ')
+        while True:
+            try:
+                item['quantity'] = int(input('Item quantity : '))
+                break
+            except ValueError:
+                print('Quantity should only be in digits')
+        while True:
+            try:
+                item['price'] = int(input('Price $ : '))
+                break
+            except ValueError:
+                print('Price should only be in digits')
+        print('Item has been successfully added.')
+        items.append(item)
+      
+    elif choice == '3' :
+        print('Edit items')
+        item_name = input('Enter the name of the item that you want to edit : ')
+        for item in items:
+            if item_name.lower() == item['name'].lower():
+                print('Here are the current details of ' + item_name)
+                print(item)
+                item['name'] = input('Item name : ')
+                while True:
+                    try:
+                        item['quantity'] = int(input('Item quantity : '))
+                        break
+                    except ValueError:
+                        print('Quantity should only be in digits')
+                while True:
+                    try:
+                        item['price'] = int(input('Price $ : '))
+                        break
+                    except ValueError:
+                        print('Price should only be in digits')
+                print('Item has been successfully updated.')
+                print(item)
+            else:
+                print('Item not found')
+
+    elif choice == '4' :
+        print('exit')
+        break
+
+    else: 
+         print('You entered an invalid option')
