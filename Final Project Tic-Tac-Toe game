@@ -1,0 +1,72 @@
+import tkinter as tk
+from tkinter import messagebox
+
+def check_winner():
+    # Check rows, columns, and diagonals for a winner
+    for i in range(3):
+        if board[i][0] == board[i][1] == board[i][2] != "":
+            return board[i][0]
+
+        if board[0][i] == board[1][i] == board[2][i] != "":
+            return board[0][i]
+
+    if board[0][0] == board[1][1] == board[2][2] != "":
+        return board[0][0]
+
+    if board[0][2] == board[1][1] == board[2][0] != "":
+        return board[0][2]
+
+    if all(board[i][j] != "" for i in range(3) for j in range(3)):
+        return "Tie"
+
+    return None
+
+def on_button_click(row, col):
+    global player, game_over
+    if board[row][col] == "" and not game_over:
+        board[row][col] = player
+        buttons[row][col].config(text=player, state=tk.DISABLED, disabledforeground='black', font=('Arial', 30, 'bold'))
+        result = check_winner()
+        if result:
+            if result == "Tie":
+                messagebox.showinfo("Tic-Tac-Toe", "It's a Tie!")
+            else:
+                messagebox.showinfo("Tic-Tac-Toe", f"Player {result} wins!")
+            game_over = True
+        else:
+            player = "O" if player == "X" else "X"
+
+def restart_game():
+    global game_over, player, board
+    game_over = False
+    player = "X"
+    board = [["" for _ in range(3)] for _ in range(3)]
+    for i in range(3):
+        for j in range(3):
+            buttons[i][j].config(text="", state=tk.NORMAL)
+
+root = tk.Tk()
+root.title("Tic-Tac-Toe")
+
+# Set background color
+root.configure(bg='#3498db')
+
+buttons = [[None, None, None], [None, None, None], [None, None, None]]
+board = [["" for _ in range(3)] for _ in range(3)]
+player = "X"
+game_over = False
+
+for i in range(3):
+    for j in range(3):
+        buttons[i][j] = tk.Button(root, text="", font=('Arial', 30, 'bold'), width=5, height=2,
+                                   command=lambda row=i, col=j: on_button_click(row, col))
+        buttons[i][j].grid(row=i, column=j)
+        # Customize button colors and font
+        buttons[i][j].configure(bg='#f39c12', fg='#ecf0f1')
+
+restart_button = tk.Button(root, text="Restart", font=('Arial', 14, 'bold'), command=restart_game)
+restart_button.grid(row=3, columnspan=3)
+# Customize restart button color
+restart_button.configure(bg='#27ae60', fg='#ecf0f1')
+
+root.mainloop()
